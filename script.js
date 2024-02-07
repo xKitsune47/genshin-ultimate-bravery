@@ -94,39 +94,45 @@ const characters = {
 
 const artifactType = {
     sands: [
-        "hp%",
-        "hp",
-        "atk%",
-        "atk",
-        "def%",
-        "def",
-        "elemental mastery",
-        "energy recharge%",
+        "HP%",
+        "HP",
+        "ATK%",
+        "ATK",
+        "DEF%",
+        "DEF",
+        "Elemental Mastery",
+        "Energy Recharge%",
     ],
-    flower: ["hp"],
+    flower: ["HP"],
     goblet: [
-        "pyro dmg",
-        "cryo dmg",
-        "electro dmg",
-        "dendro dmg",
-        "geo dmg",
-        "hydro dmg",
-        "anemo dmg",
-        "physical dmg",
-        "atk%",
-        "hp%",
-        "def%",
-        "elemental mastery",
+        "Pyro DMG",
+        "Cryo DMG",
+        "Electro DMG",
+        "Dendro DMG",
+        "Geo DMG",
+        "Hydro DMG",
+        "Anemo DMG",
+        "Physical DMG",
+        "ATK%",
+        "HP%",
+        "DEF%",
+        "Elemental Mastery",
     ],
-    plume: ["atk"],
+    plume: ["ATK"],
     circlet: [
-        "crit rate",
-        "crit dmg",
-        "def%",
-        "atk%",
-        "healing bonus",
-        "elemental mastery",
+        "Crit Rate",
+        "Crit DMG",
+        "DEF%",
+        "ATK%",
+        "Healing Bonus",
+        "Elemental Mastery",
     ],
+};
+
+const artifactRarity = {
+    max_rarity3: [1, 2, 3],
+    max_rarity4: [3, 4],
+    max_rarity5: [4, 5],
 };
 
 const artifactTypeWithoutCirclet = ["sands", "flower", "goblet", "plume"];
@@ -136,31 +142,51 @@ const blockedSets = [
     "prayers-for-illumination",
     "prayers-to-springtime",
 ];
-const levelCaps = ["min", "half", "max"];
 
 // as of 07 feb 2024 no more characters were added to the full release of the game
 
-const fetchArtifacts = fetch(`https://genshin.jmp.blue/artifacts`)
+const fetchArtifacts = fetch(`https://genshin.jmp.blue/artifacts/all`)
     .then((result) => result.json())
     .then((artifactList) => {
         function randomizeArtifact(whichArtifact, artifactPiece) {
-            const generatedStat = Math.floor(
+            function randomizeArtifactRarity(set) {
+                const maxRarityOfArtifact = set.max_rarity;
+                switch (maxRarityOfArtifact) {
+                    case 3:
+                        return artifactRarity.max_rarity3[
+                            Math.floor(
+                                Math.random() *
+                                    artifactRarity.max_rarity3.length
+                            )
+                        ];
+                    case 4:
+                        return artifactRarity.max_rarity4[
+                            Math.floor(
+                                Math.random() *
+                                    artifactRarity.max_rarity4.length
+                            )
+                        ];
+                    case 5:
+                        return artifactRarity.max_rarity5[
+                            Math.floor(
+                                Math.random() *
+                                    artifactRarity.max_rarity5.length
+                            )
+                        ];
+                }
+                // return rarityList[
+                //     Math.floor(Math.random() * rarityList.length)
+                // ];
+            }
+            let generatedMainStat = Math.floor(
                 Math.random() * whichArtifact.length
             );
             let generatedArtifactSet = Math.floor(
                 Math.random() * artifactList.length
             );
-            const generatedLevelCap = Math.floor(
-                Math.random() * levelCaps.length
-            );
+
             if (artifactTypeWithoutCirclet.includes(artifactPiece)) {
-                if (!blockedSets.includes(artifactList[generatedArtifactSet])) {
-                    return {
-                        mainStat: whichArtifact[generatedStat],
-                        artifactSet: artifactList[generatedArtifactSet],
-                        artifactRarity: levelCaps[generatedLevelCap],
-                    };
-                } else {
+                if (blockedSets.includes(artifactList[generatedArtifactSet])) {
                     let ifIncludes = blockedSets.includes(
                         artifactList[generatedArtifactSet]
                     );
@@ -173,16 +199,27 @@ const fetchArtifacts = fetch(`https://genshin.jmp.blue/artifacts`)
                         );
                     }
                     return {
-                        mainStat: whichArtifact[generatedStat],
-                        artifactSet: artifactList[generatedArtifactSet],
-                        artifactRarity: levelCaps[generatedLevelCap],
+                        mainStat: whichArtifact[generatedMainStat],
+                        artifactSet: artifactList[generatedArtifactSet].name,
+                        artifactRarity: randomizeArtifactRarity(
+                            artifactList[generatedArtifactSet]
+                        ),
                     };
                 }
+                return {
+                    mainStat: whichArtifact[generatedMainStat],
+                    artifactSet: artifactList[generatedArtifactSet].name,
+                    artifactRarity: randomizeArtifactRarity(
+                        artifactList[generatedArtifactSet]
+                    ),
+                };
             } else {
                 return {
-                    mainStat: whichArtifact[generatedStat],
-                    artifactSet: artifactList[generatedArtifactSet],
-                    artifactRarity: levelCaps[generatedLevelCap],
+                    mainStat: whichArtifact[generatedMainStat],
+                    artifactSet: artifactList[generatedArtifactSet].name,
+                    artifactRarity: randomizeArtifactRarity(
+                        artifactList[generatedArtifactSet]
+                    ),
                 };
             }
         }
