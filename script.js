@@ -129,36 +129,71 @@ const artifactType = {
     ],
 };
 
-const artifactRarity = {
-    max_rarity3: [1, 2, 3],
-    max_rarity4: [3, 4],
-    max_rarity5: [4, 5],
-};
+const artifactTypeWithoutCirclet = ["sands", "flower", "goblet", "plume"];
+const blockedSets = [
+    "prayers-for-wisdom",
+    "prayers-for-destiny",
+    "prayers-for-illumination",
+    "prayers-to-springtime",
+];
+const levelCaps = ["min", "half", "max"];
 
 // as of 07 feb 2024 no more characters were added to the full release of the game
 
 const fetchArtifacts = fetch(`https://genshin.jmp.blue/artifacts`)
     .then((result) => result.json())
     .then((artifactList) => {
-        function randomizeArtifact(whichArtifact) {
+        function randomizeArtifact(whichArtifact, artifactPiece) {
             const generatedStat = Math.floor(
                 Math.random() * whichArtifact.length
             );
-            const generatedArtifactSet = Math.floor(
+            let generatedArtifactSet = Math.floor(
                 Math.random() * artifactList.length
             );
-            return {
-                mainStat: whichArtifact[generatedStat],
-                artifactSet: artifactList[generatedArtifactSet],
-                artifactRarity: "placeholder",
-            };
+            const generatedLevelCap = Math.floor(
+                Math.random() * levelCaps.length
+            );
+            if (artifactTypeWithoutCirclet.includes(artifactPiece)) {
+                if (!blockedSets.includes(artifactList[generatedArtifactSet])) {
+                    return {
+                        mainStat: whichArtifact[generatedStat],
+                        artifactSet: artifactList[generatedArtifactSet],
+                        artifactRarity: levelCaps[generatedLevelCap],
+                    };
+                } else {
+                    let ifIncludes = blockedSets.includes(
+                        artifactList[generatedArtifactSet]
+                    );
+                    while (ifIncludes) {
+                        generatedArtifactSet = Math.floor(
+                            Math.random() * artifactList.length
+                        );
+                        ifIncludes = blockedSets.includes(
+                            artifactList[generatedArtifactSet]
+                        );
+                    }
+                    return {
+                        mainStat: whichArtifact[generatedStat],
+                        artifactSet: artifactList[generatedArtifactSet],
+                        artifactRarity: levelCaps[generatedLevelCap],
+                    };
+                }
+            } else {
+                return {
+                    mainStat: whichArtifact[generatedStat],
+                    artifactSet: artifactList[generatedArtifactSet],
+                    artifactRarity: levelCaps[generatedLevelCap],
+                };
+            }
         }
-        let gobletStat = randomizeArtifact(artifactType.goblet);
-        let plumeStat = randomizeArtifact(artifactType.plume);
-        let circletStat = randomizeArtifact(artifactType.circlet);
-        let flowerStat = randomizeArtifact(artifactType.flower);
-        let sandsStat = randomizeArtifact(artifactType.sands);
-        console.log(gobletStat, plumeStat, circletStat, flowerStat, sandsStat);
+        const characterArtifacts = {
+            goblet: randomizeArtifact(artifactType.goblet, "goblet"),
+            plume: randomizeArtifact(artifactType.plume, "plume"),
+            circlet: randomizeArtifact(artifactType.circlet, "circlet"),
+            flower: randomizeArtifact(artifactType.flower, "flower"),
+            sands: randomizeArtifact(artifactType.sands, "sands"),
+        };
+        console.log(characterArtifacts);
     });
 
 // function generateBuild() {
