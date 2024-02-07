@@ -1,0 +1,48 @@
+body {
+    background-color: #f0f1ec;
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-family: "Signika";
+}
+
+#header {
+    background-color: #3a5065;
+    text-align: center;
+    color: #f0f1ec;
+    display: flex;
+    flex-direction: row;
+}
+
+.header {
+    width: 50%;
+    justify-content: center;
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+}
+
+.headerImg {
+    height: 3rem;
+}
+
+#main {
+    height: 100%;
+}
+
+#footer {
+    background-color: #3a5065;
+    text-align: center;
+    color: #f0f1ec;
+}
+
+/* 
+white: #e5e7e6
+black: #221e22
+#182840	
+#3e4c59	
+#f0f1ec	
+#3a5065	
+#cca478
+*/
