@@ -1,97 +1,5 @@
 "use strict";
 
-const characters = {
-    bow: [
-        "aloy",
-        "amber",
-        "collei",
-        "diona",
-        "faruzan",
-        "fischl",
-        "ganyu",
-        "gorou",
-        "sara",
-        "lyney",
-        "tartaglia",
-        "tighnari",
-        "venti",
-        "yelan",
-        "yoimiya",
-    ],
-    catalyst: [
-        "baizhu",
-        "barbara",
-        "charlotte",
-        "klee",
-        "lisa",
-        "mona",
-        "nahida",
-        "neuvillette",
-        "ningguang",
-        "kokomi",
-        "heizou",
-        "sucrose",
-        "wriothesley",
-        "wanderer",
-        "xianyun",
-        "yae_miko",
-        "yanfei",
-    ],
-    claymore: [
-        "arataki_itto",
-        "beidou",
-        "chongyun",
-        "dehya",
-        "diluc",
-        "dori",
-        "eula",
-        "freminet",
-        "gaming",
-        "kaveh",
-        "navia",
-        "noelle",
-        "razor",
-        "sayu",
-        "xinyan",
-    ],
-    polearm: [
-        "candace",
-        "cyno",
-        "hu_tao",
-        "mika",
-        "raiden",
-        "rosaria",
-        "shenhe",
-        "thoma",
-        "xiangling",
-        "xiao",
-        "yaoyao",
-        "yun_jin",
-        "zhongli",
-    ],
-    sword: [
-        "albedo",
-        "alhaitham",
-        "bennet",
-        "chiori",
-        "furina",
-        "jean",
-        "kazuha",
-        "kaeya",
-        "ayaka",
-        "ayato",
-        "keqing",
-        "kirara",
-        "kuki",
-        "layla",
-        "lynette",
-        "nilou",
-        "qiqi",
-        "traveler",
-        "xingqiu",
-    ],
-};
-
 const artifactType = {
     sands: [
         "HP%",
@@ -145,6 +53,95 @@ const blockedSets = [
 
 // as of 07 feb 2024 no more characters were added to the full release of the game
 
+function generateBuilds() {
+    const character = document.querySelector(".character1").value;
+    const fetchCharacterDetails = fetch(
+        `https://genshin.jmp.blue/characters/all`
+    )
+        .then((result) => result.json())
+        .then((characterDetails) => {
+            for (let i = 0; i < characterDetails.length; i++) {
+                if (character === characterDetails[i].name) {
+                    let characterRandomizedWeapon;
+                    switch (characterDetails[i].weapon) {
+                        case "Catalyst":
+                            characterRandomizedWeapon =
+                                catalystList[
+                                    Math.floor(
+                                        Math.random() * catalystList.length
+                                    )
+                                ];
+                            break;
+                        case "Bow":
+                            characterRandomizedWeapon =
+                                bowList[
+                                    Math.floor(
+                                        Math.random() * catalystList.length
+                                    )
+                                ];
+                            break;
+                        case "Claymore":
+                            characterRandomizedWeapon =
+                                claymoreList[
+                                    Math.floor(
+                                        Math.random() * catalystList.length
+                                    )
+                                ];
+                            break;
+                        case "Polearm":
+                            characterRandomizedWeapon =
+                                polearmList[
+                                    Math.floor(
+                                        Math.random() * catalystList.length
+                                    )
+                                ];
+                            break;
+                        case "Sword":
+                            characterRandomizedWeapon =
+                                swordList[
+                                    Math.floor(
+                                        Math.random() * catalystList.length
+                                    )
+                                ];
+                            break;
+                    }
+                    console.log(characterRandomizedWeapon);
+                    break;
+                }
+            }
+        });
+}
+
+let swordList = [];
+let polearmList = [];
+let catalystList = [];
+let claymoreList = [];
+let bowList = [];
+
+const fetchWeapons = fetch(`https://genshin.jmp.blue/weapons/all`)
+    .then((result) => result.json())
+    .then((weaponList) => {
+        for (let i = 0; i < weaponList.length; i++) {
+            switch (weaponList[i].type) {
+                case "Catalyst":
+                    catalystList.push(weaponList[i].name);
+                    break;
+                case "Bow":
+                    bowList.push(weaponList[i].name);
+                    break;
+                case "Claymore":
+                    claymoreList.push(weaponList[i].name);
+                    break;
+                case "Polearm":
+                    polearmList.push(weaponList[i].name);
+                    break;
+                case "Sword":
+                    swordList.push(weaponList[i].name);
+                    break;
+            }
+        }
+    });
+
 const fetchArtifacts = fetch(`https://genshin.jmp.blue/artifacts/all`)
     .then((result) => result.json())
     .then((artifactList) => {
@@ -174,11 +171,8 @@ const fetchArtifacts = fetch(`https://genshin.jmp.blue/artifacts/all`)
                             )
                         ];
                 }
-                // return rarityList[
-                //     Math.floor(Math.random() * rarityList.length)
-                // ];
             }
-            let generatedMainStat = Math.floor(
+            const generatedMainStat = Math.floor(
                 Math.random() * whichArtifact.length
             );
             let generatedArtifactSet = Math.floor(
@@ -230,18 +224,4 @@ const fetchArtifacts = fetch(`https://genshin.jmp.blue/artifacts/all`)
             flower: randomizeArtifact(artifactType.flower, "flower"),
             sands: randomizeArtifact(artifactType.sands, "sands"),
         };
-        console.log(characterArtifacts);
     });
-
-// function generateBuild() {
-//     let gobletStat = randomizeArtifact(artifactType.goblet);
-//     let plumeStat = randomizeArtifact(artifactType.plume);
-//     let circletStat = randomizeArtifact(artifactType.circlet);
-//     let flowerStat = randomizeArtifact(artifactType.flower);
-//     let sandsStat = randomizeArtifact(artifactType.sands);
-//     console.log(gobletStat, plumeStat, circletStat, flowerStat, sandsStat);
-// }
-
-// generateBuild();
-
-// console.log(Object.keys(artifactSets).length, Object.keys(artifactSets)[1]);
