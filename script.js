@@ -51,97 +51,8 @@ const blockedSets = [
     "prayers-to-springtime",
 ];
 
-// as of 07 feb 2024 no more characters were added to the full release of the game
-
-function generateBuilds() {
-    const character = document.querySelector(".character1").value;
-    const fetchCharacterDetails = fetch(
-        `https://genshin.jmp.blue/characters/all`
-    )
-        .then((result) => result.json())
-        .then((characterDetails) => {
-            for (let i = 0; i < characterDetails.length; i++) {
-                if (character === characterDetails[i].name) {
-                    let characterRandomizedWeapon;
-                    switch (characterDetails[i].weapon) {
-                        case "Catalyst":
-                            characterRandomizedWeapon =
-                                catalystList[
-                                    Math.floor(
-                                        Math.random() * catalystList.length
-                                    )
-                                ];
-                            break;
-                        case "Bow":
-                            characterRandomizedWeapon =
-                                bowList[
-                                    Math.floor(
-                                        Math.random() * catalystList.length
-                                    )
-                                ];
-                            break;
-                        case "Claymore":
-                            characterRandomizedWeapon =
-                                claymoreList[
-                                    Math.floor(
-                                        Math.random() * catalystList.length
-                                    )
-                                ];
-                            break;
-                        case "Polearm":
-                            characterRandomizedWeapon =
-                                polearmList[
-                                    Math.floor(
-                                        Math.random() * catalystList.length
-                                    )
-                                ];
-                            break;
-                        case "Sword":
-                            characterRandomizedWeapon =
-                                swordList[
-                                    Math.floor(
-                                        Math.random() * catalystList.length
-                                    )
-                                ];
-                            break;
-                    }
-                    console.log(characterRandomizedWeapon);
-                    break;
-                }
-            }
-        });
-}
-
-let swordList = [];
-let polearmList = [];
-let catalystList = [];
-let claymoreList = [];
-let bowList = [];
-
-const fetchWeapons = fetch(`https://genshin.jmp.blue/weapons/all`)
-    .then((result) => result.json())
-    .then((weaponList) => {
-        for (let i = 0; i < weaponList.length; i++) {
-            switch (weaponList[i].type) {
-                case "Catalyst":
-                    catalystList.push(weaponList[i].name);
-                    break;
-                case "Bow":
-                    bowList.push(weaponList[i].name);
-                    break;
-                case "Claymore":
-                    claymoreList.push(weaponList[i].name);
-                    break;
-                case "Polearm":
-                    polearmList.push(weaponList[i].name);
-                    break;
-                case "Sword":
-                    swordList.push(weaponList[i].name);
-                    break;
-            }
-        }
-    });
-
+let characterArtifacts;
+// document.querySelector(".characterButton").addEventListener("click", function(){});
 const fetchArtifacts = fetch(`https://genshin.jmp.blue/artifacts/all`)
     .then((result) => result.json())
     .then((artifactList) => {
@@ -217,7 +128,7 @@ const fetchArtifacts = fetch(`https://genshin.jmp.blue/artifacts/all`)
                 };
             }
         }
-        const characterArtifacts = {
+        characterArtifacts = {
             goblet: randomizeArtifact(artifactType.goblet, "goblet"),
             plume: randomizeArtifact(artifactType.plume, "plume"),
             circlet: randomizeArtifact(artifactType.circlet, "circlet"),
@@ -225,3 +136,127 @@ const fetchArtifacts = fetch(`https://genshin.jmp.blue/artifacts/all`)
             sands: randomizeArtifact(artifactType.sands, "sands"),
         };
     });
+
+let swordList = [];
+let polearmList = [];
+let catalystList = [];
+let claymoreList = [];
+let bowList = [];
+
+const fetchWeapons = fetch(`https://genshin.jmp.blue/weapons/all`)
+    .then((result) => result.json())
+    .then((weaponList) => {
+        for (let i = 0; i < weaponList.length; i++) {
+            switch (weaponList[i].type) {
+                case "Catalyst":
+                    catalystList.push(weaponList[i].name);
+                    break;
+                case "Bow":
+                    bowList.push(weaponList[i].name);
+                    break;
+                case "Claymore":
+                    claymoreList.push(weaponList[i].name);
+                    break;
+                case "Polearm":
+                    polearmList.push(weaponList[i].name);
+                    break;
+                case "Sword":
+                    swordList.push(weaponList[i].name);
+                    break;
+            }
+        }
+    });
+
+let characterBuild = {
+    name: null,
+    weapon: null,
+    artifacts: null,
+};
+
+function generateBuilds(character) {
+    characterBuild.name = character;
+    console.log(character);
+    const fetchCharacterDetails = fetch(
+        `https://genshin.jmp.blue/characters/all`
+    )
+        .then((result) => result.json())
+        .then((characterDetails) => {
+            for (let i = 0; i < characterDetails.length; i++) {
+                if (character === characterDetails[i].name) {
+                    let characterRandomizedWeapon;
+                    switch (characterDetails[i].weapon) {
+                        case "Catalyst":
+                            characterBuild.weapon =
+                                catalystList[
+                                    Math.floor(
+                                        Math.random() * catalystList.length
+                                    )
+                                ];
+                            break;
+                        case "Bow":
+                            characterBuild.weapon =
+                                bowList[
+                                    Math.floor(
+                                        Math.random() * catalystList.length
+                                    )
+                                ];
+                            break;
+                        case "Claymore":
+                            characterBuild.weapon =
+                                claymoreList[
+                                    Math.floor(
+                                        Math.random() * catalystList.length
+                                    )
+                                ];
+                            break;
+                        case "Polearm":
+                            characterBuild.weapon =
+                                polearmList[
+                                    Math.floor(
+                                        Math.random() * catalystList.length
+                                    )
+                                ];
+                            break;
+                        case "Sword":
+                            characterBuild.weapon =
+                                swordList[
+                                    Math.floor(
+                                        Math.random() * catalystList.length
+                                    )
+                                ];
+                            break;
+                    }
+                    characterBuild.artifacts = characterArtifacts;
+                    console.log(characterBuild);
+                    break;
+                }
+            }
+        });
+}
+
+async function fetchCharacterIcons() {
+    const fetchIcons = await fetch(
+        `https://genshin.jmp.blue/characters/all`
+    ).then((result) =>
+        result.json().then((character) => {
+            let parentElement = document.querySelector(".chooseCharacter");
+            let formattedCharacter;
+            for (let i = 0; i < character.length; i++) {
+                parentElement.innerHTML += `<button onclick="generateBuilds('${
+                    character[i].name
+                }');"  class="characterButton"><img src="https://genshin.jmp.blue/characters/${character[
+                    i
+                ].name
+                    .replace(" ", "-")
+                    .toLowerCase()}/icon-big" alt="${
+                    character[i].name
+                }"></button>`;
+            }
+        })
+    );
+}
+fetchCharacterIcons();
+
+function placeholderFunction(variable) {
+    console.log(variable);
+}

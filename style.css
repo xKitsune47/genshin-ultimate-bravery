@@ -28,10 +28,43 @@ body {
 }
 
 #main {
-    height: 100%;
+    width: 75%;
+    height: fit-content;
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.chooseCharacter,
+.characterCard {
+    width: 50%;
+    text-align: center;
+    padding: 3rem;
+}
+
+.chooseCharacter {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-column-gap: 2rem;
+    grid-row-gap: 1rem;
+
+    img {
+        width: 3.5rem;
+        position: relative;
+        font-family: "Signika";
+    }
+}
+
+.chooseCharacter button {
+    border: none;
+}
+.chooseCharacter button:active {
+    border: 1px, solid, black;
 }
 
 #footer {
+    padding: 1rem;
     background-color: #3a5065;
     text-align: center;
     color: #f0f1ec;
