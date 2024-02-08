@@ -52,7 +52,6 @@ const blockedSets = [
 ];
 
 let characterArtifacts;
-// document.querySelector(".characterButton").addEventListener("click", function(){});
 const fetchArtifacts = fetch(`https://genshin.jmp.blue/artifacts/all`)
     .then((result) => result.json())
     .then((artifactList) => {
@@ -143,7 +142,7 @@ let catalystList = [];
 let claymoreList = [];
 let bowList = [];
 
-const fetchWeapons = fetch(`https://genshin.jmp.blue/weapons/all`)
+fetch(`https://genshin.jmp.blue/weapons/all`)
     .then((result) => result.json())
     .then((weaponList) => {
         for (let i = 0; i < weaponList.length; i++) {
@@ -175,10 +174,7 @@ let characterBuild = {
 
 function generateBuilds(character) {
     characterBuild.name = character;
-    console.log(character);
-    const fetchCharacterDetails = fetch(
-        `https://genshin.jmp.blue/characters/all`
-    )
+    fetch(`https://genshin.jmp.blue/characters/all`)
         .then((result) => result.json())
         .then((characterDetails) => {
             for (let i = 0; i < characterDetails.length; i++) {
@@ -232,6 +228,76 @@ function generateBuilds(character) {
                 }
             }
         });
+    showBuildDetails();
+}
+
+function showBuildDetails() {
+    const parentElement = document.querySelector(".characterCard");
+    parentElement.innerHTML += `<h2>Your build for ${characterBuild.name}:</h2>`;
+    setTimeout(() => {
+        fetch(`https://genshin.jmp.blue/artifacts/all`)
+            .then((result) => result.json())
+            .then((artifactPieceName) => {
+                const circletSetName =
+                    characterBuild.artifacts.circlet.artifactSet
+                        .replaceAll(" ", "-")
+                        .replaceAll("'", "-")
+                        .toLowerCase();
+                const flowerSetName =
+                    characterBuild.artifacts.flower.artifactSet
+                        .replaceAll(" ", "-")
+                        .replaceAll("'", "-")
+                        .toLowerCase();
+                const gobletSetName =
+                    characterBuild.artifacts.goblet.artifactSet
+                        .replaceAll(" ", "-")
+                        .replaceAll("'", "-")
+                        .toLowerCase();
+                const plumeSetName = characterBuild.artifacts.plume.artifactSet
+                    .replaceAll(" ", "-")
+                    .replaceAll("'", "-")
+                    .toLowerCase();
+                const sandsSetName = characterBuild.artifacts.sands.artifactSet
+                    .replaceAll(" ", "-")
+                    .replaceAll("'", "-")
+                    .toLowerCase();
+                const artifactsImgs = {
+                    circletSetName: [
+                        `https://genshin.jmp.blue/artifacts/${circletSetName}/circlet-of-logos`,
+                        circletSetName,
+                    ],
+                    flowerSetName: [
+                        `https://genshin.jmp.blue/artifacts/${flowerSetName}/circlet-of-logos`,
+                        flowerSetName,
+                    ],
+                    gobletSetName: [
+                        `https://genshin.jmp.blue/artifacts/${gobletSetName}/circlet-of-logos`,
+                        gobletSetName,
+                    ],
+                    plumeSetName: [
+                        `https://genshin.jmp.blue/artifacts/${plumeSetName}/circlet-of-logos`,
+                        plumeSetName,
+                    ],
+                    sandsSetName: [
+                        `https://genshin.jmp.blue/artifacts/${sandsSetName}/circlet-of-logos`,
+                        sandsSetName,
+                    ],
+                };
+                const mapArtifactsImgs = new Map(Object.entries(artifactsImgs));
+                for (let [key, value] of mapArtifactsImgs) {
+                    fetch(value)
+                        .then((imgResult) => imgResult)
+                        .then((fetchedImg) => {
+                            parentElement.innerHTML += `
+                            <span>
+                                <img src="${value[0]}" alt="${value[1]}">
+                                <h3>Main stat: ${4}</h3>
+                            </span>
+                            `;
+                        });
+                }
+            });
+    }, 500);
 }
 
 async function fetchCharacterIcons() {
@@ -257,6 +323,7 @@ async function fetchCharacterIcons() {
 }
 fetchCharacterIcons();
 
+// location.reload()
 function placeholderFunction(variable) {
     console.log(variable);
 }
