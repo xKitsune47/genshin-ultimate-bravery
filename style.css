@@ -145,8 +145,14 @@ body {
         flex-direction: row;
 
         img {
-            width: 5.5rem;
+            width: 4.5rem;
             margin: 0 0.5rem 0 0.5rem;
+        }
+    }
+
+    .weaponCard {
+        img {
+            width: 10rem;
         }
     }
 
