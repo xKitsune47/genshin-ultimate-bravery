@@ -223,7 +223,6 @@ function generateBuilds(character) {
                             break;
                     }
                     characterBuild.artifacts = characterArtifacts;
-                    console.log(characterBuild);
                     break;
                 }
             }
@@ -270,25 +269,25 @@ function showBuildDetails() {
                         characterBuild.artifacts.circlet.mainStat,
                     ],
                     flowerSetName: [
-                        `https://genshin.jmp.blue/artifacts/${flowerSetName}/circlet-of-logos`,
+                        `https://genshin.jmp.blue/artifacts/${flowerSetName}/flower-of-life`,
                         flowerSetName,
                         characterBuild.artifacts.flower.artifactRarity,
                         characterBuild.artifacts.flower.mainStat,
                     ],
                     gobletSetName: [
-                        `https://genshin.jmp.blue/artifacts/${gobletSetName}/circlet-of-logos`,
+                        `https://genshin.jmp.blue/artifacts/${gobletSetName}/goblet-of-eonothem`,
                         gobletSetName,
                         characterBuild.artifacts.goblet.artifactRarity,
                         characterBuild.artifacts.goblet.mainStat,
                     ],
                     plumeSetName: [
-                        `https://genshin.jmp.blue/artifacts/${plumeSetName}/circlet-of-logos`,
+                        `https://genshin.jmp.blue/artifacts/${plumeSetName}/plume-of-death`,
                         plumeSetName,
                         characterBuild.artifacts.plume.artifactRarity,
                         characterBuild.artifacts.plume.mainStat,
                     ],
                     sandsSetName: [
-                        `https://genshin.jmp.blue/artifacts/${sandsSetName}/circlet-of-logos`,
+                        `https://genshin.jmp.blue/artifacts/${sandsSetName}/sand-of-eon`,
                         sandsSetName,
                         characterBuild.artifacts.sands.artifactRarity,
                         characterBuild.artifacts.sands.mainStat,
@@ -310,28 +309,41 @@ function showBuildDetails() {
                             return `#DE9235`;
                     }
                 }
+                function artifactPiece(key) {
+                    switch (key) {
+                        case "circletSetName":
+                            return "Circlet";
+                        case "flowerSetName":
+                            return "Flower";
+                        case "gobletSetName":
+                            return "Goblet";
+                        case "plumeSetName":
+                            return "Plume";
+                        case "sandsSetName":
+                            return "Sands";
+                    }
+                }
                 for (let [key, value] of mapArtifactsImgs) {
-                    let artifactColor = artifactRarityColor(value[2]);
-                    fetch(value[0])
-                        .then((imgResult) => imgResult)
-                        .then((fetchedImg) => {
-                            parentElement.innerHTML += `
+                    fetch(value[0]).then((imgResult) => {
+                        parentElement.innerHTML += `
                             <span>
-                                <img src="${value[0]}" alt="${value[1]}" style="background-color: ${artifactColor}">
+                                <h3>${artifactPiece(key)}</h3>
+                                <img src="${value[0]}" alt="${
+                            value[1]
+                        }" style="background-color: ${artifactRarityColor(
+                            value[2]
+                        )}">
                                 <h3>${value[3]}</h3>
                             </span>
                             `;
-                        });
+                    });
                 }
-                const characterWeapon = characterBuild.weapon.replaceAll(
-                    " ",
-                    "_"
-                );
-                document.querySelector(".weaponCard").innerHTML = `
+            });
+        const characterWeapon = characterBuild.weapon.replaceAll(" ", "_");
+        document.querySelector(".weaponCard").innerHTML = `
                     <img src="https://rerollcdn.com/GENSHIN/Weapons/${characterWeapon}.png" alt="${characterWeapon}">
                     <h3>${characterBuild.weapon}</h3>
                     `;
-            });
     }, 500);
 }
 
@@ -340,17 +352,14 @@ async function fetchCharacterIcons() {
         `https://genshin.jmp.blue/characters/all`
     ).then((result) =>
         result.json().then((character) => {
-            console.log(character);
             let parentElement = document.querySelector(".chooseCharacter");
             let formattedCharacter;
             for (let i = 0; i < character.length; i++) {
                 let tempCharacter = character[i].name;
                 if (tempCharacter === "Raiden Shogun") {
                     formattedCharacter = "Raiden";
-                    console.log(tempCharacter);
                 } else if (tempCharacter === "Tartaglia") {
                     formattedCharacter = "Childe";
-                    console.log(tempCharacter);
                 } else if (tempCharacter === "Kujou Sara") {
                     formattedCharacter = "Sara";
                 } else if (tempCharacter === "Traveler") {
@@ -381,18 +390,3 @@ async function fetchCharacterIcons() {
     );
 }
 fetchCharacterIcons();
-
-// location.reload()
-function placeholderFunction(variable) {
-    console.log(variable);
-}
-
-{
-    /* <img src="https://genshin.jmp.blue/characters/${character[
-                    i
-                ].name
-                    .replace(" ", "-")
-                    .toLowerCase()}/icon-big" alt="${
-                    character[i].name
-                }"> */
-}
