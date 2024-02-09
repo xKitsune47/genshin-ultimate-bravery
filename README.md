@@ -3,7 +3,7 @@
 TBD: randomizing boss to fight with this/these build/s
 
 Idea suggested by my friend.
-It was a great oppurtunity to utilize objects and mapping, which I've learned about recently. Plus API calls.
+It was a great opportunity to utilize objects and mapping, which I've learned about recently. Plus API calls.
 
 The UI design is simple and readable (or at least I hope so). The site should work on both desktops and smartphones.
 
