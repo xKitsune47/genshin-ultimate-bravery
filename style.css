@@ -6,26 +6,29 @@ body {
     flex-direction: column;
     font-family: "Signika";
 }
+#header {
+    background-color: #3a5065;
+    text-align: center;
+    color: #f0f1ec;
+    display: flex;
+    flex-direction: row;
+}
 
 @media only screen and (min-width: 1300px) {
-    #header {
-        background-color: #3a5065;
-        text-align: center;
-        color: #f0f1ec;
-        display: flex;
-        flex-direction: row;
-    }
-
     .header {
         width: 50%;
         justify-content: center;
         margin: auto;
         display: flex;
         flex-direction: row;
-    }
 
-    .headerImg {
-        height: 3rem;
+        img {
+            height: 3rem;
+            transition: all 0.3s;
+        }
+        img:hover {
+            transform: scale(1.08);
+        }
     }
 
     #main {
@@ -37,21 +40,17 @@ body {
         justify-content: center;
     }
 
-    .chooseCharacter,
-    .characterCard {
+    .chooseCharacter {
         width: 50%;
         text-align: center;
         padding: 3rem;
-    }
-
-    .chooseCharacter {
         display: grid;
         grid-template-columns: repeat(5, 1fr);
         grid-column-gap: 2rem;
         grid-row-gap: 1rem;
 
         img {
-            width: 3.5rem;
+            width: 5rem;
             position: relative;
             font-family: "Signika";
         }
@@ -60,9 +59,45 @@ body {
     .chooseCharacter button {
         border: none;
     }
+    .characterCard {
+        width: 50%;
+        padding: 3rem;
+        text-align: center;
+    }
+
+    .chooseCharacter button {
+        border: none;
+        transition: all 0.3s;
+    }
+
+    .chooseCharacter button:hover {
+        cursor: pointer;
+        transform: scale(1.05);
+    }
 
     .chooseCharacter button:active {
-        border: 1px, solid, black;
+        opacity: 0.9;
+    }
+
+    .characterCard {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .artifactsCard {
+        display: flex;
+        flex-direction: row;
+
+        img {
+            width: 5rem;
+            margin: 0 0.5rem 0 0.5rem;
+        }
+    }
+
+    .weaponCard {
+        img {
+            width: 10rem;
+        }
     }
 
     #footer {
@@ -73,25 +108,21 @@ body {
     }
 }
 
-@media only screen and (max-width: 1299px) {
-    #header {
-        background-color: #3a5065;
-        text-align: center;
-        color: #f0f1ec;
-        display: flex;
-        flex-direction: row;
-    }
-
+@media only screen and (min-width: 1024px) and (max-width: 1299px) {
     .header {
         width: 50%;
         justify-content: center;
         margin: auto;
         display: flex;
         flex-direction: row;
-    }
 
-    .headerImg {
-        height: 3rem;
+        img {
+            height: 3rem;
+            transition: all 0.3s;
+        }
+        img:hover {
+            transform: scale(1.08);
+        }
     }
 
     #main {
@@ -107,15 +138,7 @@ body {
         width: 40%;
         text-align: center;
         padding: 3rem;
-    }
-
-    .characterCard {
-        width: 60%;
-        text-align: center;
-        padding: 3rem;
-    }
-
-    .chooseCharacter {
+        border-right: 0.125rem solid #3a5065;
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         grid-column-gap: 2rem;
@@ -128,11 +151,18 @@ body {
         }
     }
 
+    .characterCard {
+        width: 60%;
+        text-align: center;
+        padding: 3rem;
+    }
+
     .chooseCharacter button {
         border: none;
+        transition: all 0.3s;
     }
-    .chooseCharacter button:active {
-        border: 1px, solid, black;
+    .chooseCharacter button:hover {
+        transform: scale(1.05);
     }
 
     .characterCard {
@@ -160,6 +190,68 @@ body {
         padding: 1rem;
         background-color: #3a5065;
         text-align: center;
+        color: #f0f1ec;
+    }
+}
+
+@media only screen and (max-width: 1023px) {
+    #header {
+        display: flex;
+        flex-direction: column;
+
+        .header {
+            width: 100%;
+
+            img {
+                width: 3rem;
+                padding-bottom: 1rem;
+            }
+        }
+    }
+
+    #main {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+
+        .chooseCharacter {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            row-gap: 1rem;
+            height: fit-content;
+            padding: 1rem;
+            border-bottom: #3a5065 0.125rem solid;
+
+            img {
+                width: 3rem;
+            }
+
+            button {
+                border: none;
+            }
+        }
+
+        .characterCard {
+            .artifactsCard {
+                span {
+                    padding: 1rem;
+                }
+                img {
+                    width: 8rem;
+                }
+            }
+            .weaponCard {
+                img {
+                    width: 10rem;
+                }
+            }
+        }
+    }
+
+    #footer {
+        text-align: center;
+        padding: 1rem;
+        background-color: #3a5065;
         color: #f0f1ec;
     }
 }
