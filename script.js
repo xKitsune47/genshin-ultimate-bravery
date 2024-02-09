@@ -232,8 +232,9 @@ function generateBuilds(character) {
 }
 
 function showBuildDetails() {
-    const parentElement = document.querySelector(".characterCard");
-    parentElement.innerHTML += `<h2>Your build for ${characterBuild.name}:</h2>`;
+    document.querySelector(
+        ".titleCard"
+    ).innerHTML += `<h2>Your build for ${characterBuild.name}:</h2>`;
     setTimeout(() => {
         fetch(`https://genshin.jmp.blue/artifacts/all`)
             .then((result) => result.json())
@@ -265,37 +266,64 @@ function showBuildDetails() {
                     circletSetName: [
                         `https://genshin.jmp.blue/artifacts/${circletSetName}/circlet-of-logos`,
                         circletSetName,
+                        characterBuild.artifacts.circlet.artifactRarity,
+                        characterBuild.artifacts.circlet.mainStat,
                     ],
                     flowerSetName: [
                         `https://genshin.jmp.blue/artifacts/${flowerSetName}/circlet-of-logos`,
                         flowerSetName,
+                        characterBuild.artifacts.flower.artifactRarity,
+                        characterBuild.artifacts.flower.mainStat,
                     ],
                     gobletSetName: [
                         `https://genshin.jmp.blue/artifacts/${gobletSetName}/circlet-of-logos`,
                         gobletSetName,
+                        characterBuild.artifacts.goblet.artifactRarity,
+                        characterBuild.artifacts.goblet.mainStat,
                     ],
                     plumeSetName: [
                         `https://genshin.jmp.blue/artifacts/${plumeSetName}/circlet-of-logos`,
                         plumeSetName,
+                        characterBuild.artifacts.plume.artifactRarity,
+                        characterBuild.artifacts.plume.mainStat,
                     ],
                     sandsSetName: [
                         `https://genshin.jmp.blue/artifacts/${sandsSetName}/circlet-of-logos`,
                         sandsSetName,
+                        characterBuild.artifacts.sands.artifactRarity,
+                        characterBuild.artifacts.sands.mainStat,
                     ],
                 };
+                const parentElement = document.querySelector(".artifactsCard");
                 const mapArtifactsImgs = new Map(Object.entries(artifactsImgs));
+                function artifactRarityColor(colorNumber) {
+                    switch (parseInt(colorNumber)) {
+                        case 1:
+                            return `#C6BCB7`;
+                        case 2:
+                            return `#73A570`;
+                        case 3:
+                            return `#559CAD`;
+                        case 4:
+                            return `#8C5383`;
+                        case 5:
+                            return `#DE9235`;
+                    }
+                }
                 for (let [key, value] of mapArtifactsImgs) {
-                    fetch(value)
+                    let artifactColor = artifactRarityColor(value[2]);
+                    fetch(value[0])
                         .then((imgResult) => imgResult)
                         .then((fetchedImg) => {
                             parentElement.innerHTML += `
                             <span>
-                                <img src="${value[0]}" alt="${value[1]}">
-                                <h3>Main stat: ${4}</h3>
+                                <img src="${value[0]}" alt="${value[1]}" style="background-color: ${artifactColor}">
+                                <h3>${value[3]}</h3>
                             </span>
                             `;
                         });
                 }
+                // fetch(`https`)
             });
     }, 500);
 }
