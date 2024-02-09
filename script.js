@@ -52,55 +52,67 @@ const blockedSets = [
 ];
 
 let characterArtifacts;
-const fetchArtifacts = fetch(`https://genshin.jmp.blue/artifacts/all`)
-    .then((result) => result.json())
-    .then((artifactList) => {
-        function randomizeArtifact(whichArtifact, artifactPiece) {
-            function randomizeArtifactRarity(set) {
-                const maxRarityOfArtifact = set.max_rarity;
-                switch (maxRarityOfArtifact) {
-                    case 3:
-                        return artifactRarity.max_rarity3[
-                            Math.floor(
-                                Math.random() *
-                                    artifactRarity.max_rarity3.length
-                            )
-                        ];
-                    case 4:
-                        return artifactRarity.max_rarity4[
-                            Math.floor(
-                                Math.random() *
-                                    artifactRarity.max_rarity4.length
-                            )
-                        ];
-                    case 5:
-                        return artifactRarity.max_rarity5[
-                            Math.floor(
-                                Math.random() *
-                                    artifactRarity.max_rarity5.length
-                            )
-                        ];
+async function fetchArtifacts() {
+    await fetch(`https://genshin.jmp.blue/artifacts/all`)
+        .then((result) => result.json())
+        .then((artifactList) => {
+            function randomizeArtifact(whichArtifact, artifactPiece) {
+                function randomizeArtifactRarity(set) {
+                    const maxRarityOfArtifact = set.max_rarity;
+                    switch (maxRarityOfArtifact) {
+                        case 3:
+                            return artifactRarity.max_rarity3[
+                                Math.floor(
+                                    Math.random() *
+                                        artifactRarity.max_rarity3.length
+                                )
+                            ];
+                        case 4:
+                            return artifactRarity.max_rarity4[
+                                Math.floor(
+                                    Math.random() *
+                                        artifactRarity.max_rarity4.length
+                                )
+                            ];
+                        case 5:
+                            return artifactRarity.max_rarity5[
+                                Math.floor(
+                                    Math.random() *
+                                        artifactRarity.max_rarity5.length
+                                )
+                            ];
+                    }
                 }
-            }
-            const generatedMainStat = Math.floor(
-                Math.random() * whichArtifact.length
-            );
-            let generatedArtifactSet = Math.floor(
-                Math.random() * artifactList.length
-            );
+                const generatedMainStat = Math.floor(
+                    Math.random() * whichArtifact.length
+                );
+                let generatedArtifactSet = Math.floor(
+                    Math.random() * artifactList.length
+                );
 
-            if (artifactTypeWithoutCirclet.includes(artifactPiece)) {
-                if (blockedSets.includes(artifactList[generatedArtifactSet])) {
-                    let ifIncludes = blockedSets.includes(
-                        artifactList[generatedArtifactSet]
-                    );
-                    while (ifIncludes) {
-                        generatedArtifactSet = Math.floor(
-                            Math.random() * artifactList.length
-                        );
-                        ifIncludes = blockedSets.includes(
+                if (artifactTypeWithoutCirclet.includes(artifactPiece)) {
+                    if (
+                        blockedSets.includes(artifactList[generatedArtifactSet])
+                    ) {
+                        let ifIncludes = blockedSets.includes(
                             artifactList[generatedArtifactSet]
                         );
+                        while (ifIncludes) {
+                            generatedArtifactSet = Math.floor(
+                                Math.random() * artifactList.length
+                            );
+                            ifIncludes = blockedSets.includes(
+                                artifactList[generatedArtifactSet]
+                            );
+                        }
+                        return {
+                            mainStat: whichArtifact[generatedMainStat],
+                            artifactSet:
+                                artifactList[generatedArtifactSet].name,
+                            artifactRarity: randomizeArtifactRarity(
+                                artifactList[generatedArtifactSet]
+                            ),
+                        };
                     }
                     return {
                         mainStat: whichArtifact[generatedMainStat],
@@ -109,32 +121,26 @@ const fetchArtifacts = fetch(`https://genshin.jmp.blue/artifacts/all`)
                             artifactList[generatedArtifactSet]
                         ),
                     };
+                } else {
+                    return {
+                        mainStat: whichArtifact[generatedMainStat],
+                        artifactSet: artifactList[generatedArtifactSet].name,
+                        artifactRarity: randomizeArtifactRarity(
+                            artifactList[generatedArtifactSet]
+                        ),
+                    };
                 }
-                return {
-                    mainStat: whichArtifact[generatedMainStat],
-                    artifactSet: artifactList[generatedArtifactSet].name,
-                    artifactRarity: randomizeArtifactRarity(
-                        artifactList[generatedArtifactSet]
-                    ),
-                };
-            } else {
-                return {
-                    mainStat: whichArtifact[generatedMainStat],
-                    artifactSet: artifactList[generatedArtifactSet].name,
-                    artifactRarity: randomizeArtifactRarity(
-                        artifactList[generatedArtifactSet]
-                    ),
-                };
             }
-        }
-        characterArtifacts = {
-            goblet: randomizeArtifact(artifactType.goblet, "goblet"),
-            plume: randomizeArtifact(artifactType.plume, "plume"),
-            circlet: randomizeArtifact(artifactType.circlet, "circlet"),
-            flower: randomizeArtifact(artifactType.flower, "flower"),
-            sands: randomizeArtifact(artifactType.sands, "sands"),
-        };
-    });
+            characterBuild.artifacts = {
+                goblet: randomizeArtifact(artifactType.goblet, "goblet"),
+                plume: randomizeArtifact(artifactType.plume, "plume"),
+                circlet: randomizeArtifact(artifactType.circlet, "circlet"),
+                flower: randomizeArtifact(artifactType.flower, "flower"),
+                sands: randomizeArtifact(artifactType.sands, "sands"),
+            };
+            return;
+        });
+}
 
 let swordList = [];
 let polearmList = [];
@@ -166,6 +172,25 @@ fetch(`https://genshin.jmp.blue/weapons/all`)
         }
     });
 
+function randomizeWeapon(weaponType) {
+    switch (weaponType) {
+        case "Catalyst":
+            return catalystList[
+                Math.floor(Math.random() * catalystList.length)
+            ];
+        case "Bow":
+            return bowList[Math.floor(Math.random() * catalystList.length)];
+        case "Claymore":
+            return claymoreList[
+                Math.floor(Math.random() * catalystList.length)
+            ];
+        case "Polearm":
+            return polearmList[Math.floor(Math.random() * catalystList.length)];
+        case "Sword":
+            return swordList[Math.floor(Math.random() * catalystList.length)];
+    }
+}
+
 let characterBuild = {
     name: null,
     weapon: null,
@@ -173,56 +198,23 @@ let characterBuild = {
 };
 
 function generateBuilds(character) {
+    document.querySelector(
+        ".characterCard"
+    ).innerHTML = `<div class="titleCard"></div>
+    <div class="artifactsCard"></div>
+    <div class="weaponCard"></div>
+    <div class="bossCard"></div>`;
+
     characterBuild.name = character;
     fetch(`https://genshin.jmp.blue/characters/all`)
         .then((result) => result.json())
         .then((characterDetails) => {
             for (let i = 0; i < characterDetails.length; i++) {
                 if (character === characterDetails[i].name) {
-                    let characterRandomizedWeapon;
-                    switch (characterDetails[i].weapon) {
-                        case "Catalyst":
-                            characterBuild.weapon =
-                                catalystList[
-                                    Math.floor(
-                                        Math.random() * catalystList.length
-                                    )
-                                ];
-                            break;
-                        case "Bow":
-                            characterBuild.weapon =
-                                bowList[
-                                    Math.floor(
-                                        Math.random() * catalystList.length
-                                    )
-                                ];
-                            break;
-                        case "Claymore":
-                            characterBuild.weapon =
-                                claymoreList[
-                                    Math.floor(
-                                        Math.random() * catalystList.length
-                                    )
-                                ];
-                            break;
-                        case "Polearm":
-                            characterBuild.weapon =
-                                polearmList[
-                                    Math.floor(
-                                        Math.random() * catalystList.length
-                                    )
-                                ];
-                            break;
-                        case "Sword":
-                            characterBuild.weapon =
-                                swordList[
-                                    Math.floor(
-                                        Math.random() * catalystList.length
-                                    )
-                                ];
-                            break;
-                    }
-                    characterBuild.artifacts = characterArtifacts;
+                    characterBuild.weapon = randomizeWeapon(
+                        characterDetails[i].weapon
+                    );
+                    characterBuild.artifacts = fetchArtifacts();
                     break;
                 }
             }
