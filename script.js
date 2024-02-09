@@ -323,7 +323,13 @@ function showBuildDetails() {
                             `;
                         });
                 }
-                // fetch(`https`)
+                const characterWeapon = characterBuild.weapon
+                    .replaceAll(" ", "-")
+                    .toLowerCase();
+                document.querySelector(".weaponCard").innerHTML = `
+                    <img src="https://genshin.jmp.blue/weapons/${characterWeapon}/icon" alt="${characterWeapon}">
+                    <h3>${characterBuild.weapon}</h3>
+                    `;
             });
     }, 500);
 }
