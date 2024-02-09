@@ -103,9 +103,14 @@ body {
         justify-content: center;
     }
 
-    .chooseCharacter,
+    .chooseCharacter {
+        width: 40%;
+        text-align: center;
+        padding: 3rem;
+    }
+
     .characterCard {
-        width: 50%;
+        width: 60%;
         text-align: center;
         padding: 3rem;
     }
@@ -131,8 +136,17 @@ body {
     }
 
     .characterCard {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .artifactsCard {
+        display: flex;
+        flex-direction: row;
+
         img {
-            width: 5rem;
+            width: 5.5rem;
+            margin: 0 0.5rem 0 0.5rem;
         }
     }
 
