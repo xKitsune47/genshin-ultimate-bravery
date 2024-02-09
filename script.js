@@ -323,11 +323,12 @@ function showBuildDetails() {
                             `;
                         });
                 }
-                const characterWeapon = characterBuild.weapon
-                    .replaceAll(" ", "-")
-                    .toLowerCase();
+                const characterWeapon = characterBuild.weapon.replaceAll(
+                    " ",
+                    "_"
+                );
                 document.querySelector(".weaponCard").innerHTML = `
-                    <img src="https://genshin.jmp.blue/weapons/${characterWeapon}/icon" alt="${characterWeapon}">
+                    <img src="https://rerollcdn.com/GENSHIN/Weapons/${characterWeapon}.png" alt="${characterWeapon}">
                     <h3>${characterBuild.weapon}</h3>
                     `;
             });
@@ -339,18 +340,42 @@ async function fetchCharacterIcons() {
         `https://genshin.jmp.blue/characters/all`
     ).then((result) =>
         result.json().then((character) => {
+            console.log(character);
             let parentElement = document.querySelector(".chooseCharacter");
             let formattedCharacter;
             for (let i = 0; i < character.length; i++) {
-                parentElement.innerHTML += `<button onclick="generateBuilds('${
-                    character[i].name
-                }');"  class="characterButton"><img src="https://genshin.jmp.blue/characters/${character[
-                    i
-                ].name
-                    .replace(" ", "-")
-                    .toLowerCase()}/icon-big" alt="${
-                    character[i].name
-                }"></button>`;
+                let tempCharacter = character[i].name;
+                if (tempCharacter === "Raiden Shogun") {
+                    formattedCharacter = "Raiden";
+                    console.log(tempCharacter);
+                } else if (tempCharacter === "Tartaglia") {
+                    formattedCharacter = "Childe";
+                    console.log(tempCharacter);
+                } else if (tempCharacter === "Kujou Sara") {
+                    formattedCharacter = "Sara";
+                } else if (tempCharacter === "Traveler") {
+                    formattedCharacter = "Traveler%20(Anemo)";
+                } else if (tempCharacter.includes(" ")) {
+                    if (
+                        tempCharacter.slice(0, tempCharacter.indexOf(" "))
+                            .length > 5
+                    ) {
+                        formattedCharacter = tempCharacter.slice(
+                            tempCharacter.indexOf(" ") + 1
+                        );
+                    } else {
+                        formattedCharacter = tempCharacter.replaceAll(
+                            " ",
+                            "%20"
+                        );
+                    }
+                } else {
+                    formattedCharacter = tempCharacter;
+                }
+
+                parentElement.innerHTML += `<button onclick="generateBuilds('${character[i].name}');"  class="characterButton">
+                <img src="https://rerollcdn.com/GENSHIN/Characters/1/${formattedCharacter}.png" alt="${character[i].name}">
+                </button>`;
             }
         })
     );
@@ -360,4 +385,14 @@ fetchCharacterIcons();
 // location.reload()
 function placeholderFunction(variable) {
     console.log(variable);
+}
+
+{
+    /* <img src="https://genshin.jmp.blue/characters/${character[
+                    i
+                ].name
+                    .replace(" ", "-")
+                    .toLowerCase()}/icon-big" alt="${
+                    character[i].name
+                }"> */
 }
